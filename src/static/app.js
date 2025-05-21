@@ -4,32 +4,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const signupForm = document.getElementById("signup-form");
   const messageDiv = document.getElementById("message");
 
-  // Function to fetch activities from API
+  // Function to fetch activities from API and render them
   async function fetchActivities() {
     try {
       const response = await fetch("/activities");
       const activities = await response.json();
 
-      // Clear loading message
-      activitiesList.innerHTML = "";
+      // Render activities using the template
+      renderActivities(activities);
 
-      // Populate activities list
-      Object.entries(activities).forEach(([name, details]) => {
-        const activityCard = document.createElement("div");
-        activityCard.className = "activity-card";
-
-        const spotsLeft = details.max_participants - details.participants.length;
-
-        activityCard.innerHTML = `
-          <h4>${name}</h4>
-          <p>${details.description}</p>
-          <p><strong>Schedule:</strong> ${details.schedule}</p>
-          <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
-        `;
-
-        activitiesList.appendChild(activityCard);
-
-        // Add option to select dropdown
+      // Populate activity select dropdown
+      activitySelect.innerHTML = '<option value="">-- Select an activity --</option>';
+      Object.keys(activities).forEach((name) => {
         const option = document.createElement("option");
         option.value = name;
         option.textContent = name;
@@ -80,6 +66,34 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("Error signing up:", error);
     }
   });
+
+  // Render activities using the template in index.html
+  function renderActivities(activities) {
+    const container = document.getElementById("activities-list");
+    const template = document.getElementById("activity-card-template");
+    container.innerHTML = "";
+    Object.entries(activities).forEach(([name, info]) => {
+      const card = template.content.cloneNode(true);
+      card.querySelector(".activity-name").textContent = name;
+      card.querySelector(".activity-description").textContent = info.description;
+      card.querySelector(".activity-schedule").textContent = info.schedule;
+      card.querySelector(".activity-max").textContent = info.max_participants;
+      const participantsList = card.querySelector(".participants-list");
+      participantsList.innerHTML = "";
+      if (info.participants && info.participants.length > 0) {
+        info.participants.forEach((p) => {
+          const li = document.createElement("li");
+          li.textContent = p;
+          participantsList.appendChild(li);
+        });
+      } else {
+        const li = document.createElement("li");
+        li.innerHTML = "<em>No participants yet</em>";
+        participantsList.appendChild(li);
+      }
+      container.appendChild(card);
+    });
+  }
 
   // Initialize app
   fetchActivities();

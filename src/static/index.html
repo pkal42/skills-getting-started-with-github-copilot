@@ -16,9 +16,21 @@
       <section id="activities-container">
         <h3>Available Activities</h3>
         <div id="activities-list">
-          <!-- Activities will be loaded here -->
-          <p>Loading activities...</p>
+          <!-- Activity cards will be rendered here -->
         </div>
+        <!-- Activity card template -->
+        <template id="activity-card-template">
+          <div class="activity-card">
+            <h3 class="activity-name"></h3>
+            <p><strong>Description:</strong> <span class="activity-description"></span></p>
+            <p><strong>Schedule:</strong> <span class="activity-schedule"></span></p>
+            <p><strong>Max Participants:</strong> <span class="activity-max"></span></p>
+            <div class="participants-section">
+              <h4>Participants:</h4>
+              <ul class="participants-list"></ul>
+            </div>
+          </div>
+        </template>
       </section>
 
       <section id="signup-container">
@@ -26,7 +38,12 @@
         <form id="signup-form">
           <div class="form-group">
             <label for="email">Student Email:</label>
-            <input type="email" id="email" required placeholder="your-email@mergington.edu" />
+            <input
+              type="email"
+              id="email"
+              required
+              placeholder="your-email@mergington.edu"
+            />
           </div>
           <div class="form-group">
             <label for="activity">Select Activity:</label>

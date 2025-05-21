@@ -78,6 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
       card.querySelector(".activity-description").textContent = info.description;
       card.querySelector(".activity-schedule").textContent = info.schedule;
       card.querySelector(".activity-max").textContent = info.max_participants;
+      card.querySelector(".activity-available").textContent = info.max_participants - (info.participants?.length || 0);
       const participantsList = card.querySelector(".participants-list");
       participantsList.innerHTML = "";
       if (info.participants && info.participants.length > 0) {
